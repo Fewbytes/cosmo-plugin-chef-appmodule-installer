@@ -22,8 +22,7 @@ and run the relevant runlist using the chef_client module.
 """
 
 from cosmo.celery import celery
-import celery.utils.log
-from chef_client_common import set_up_chef_client, run_chef
+from chef_client_common.chef_client import set_up_chef_client, run_chef
 
 logger = celery.utils.log.get_task_logger(__name__)
 
