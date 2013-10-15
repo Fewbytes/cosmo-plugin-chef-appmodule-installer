@@ -21,10 +21,11 @@ This file implements the AppModule.installer interface, where for each of tasks,
 and run the relevant runlist using the chef_client module.
 """
 
+from celery.utils.log import get_task_logger
 from cosmo.celery import celery
 from chef_client_common.chef_client import set_up_chef_client, run_chef
 
-logger = celery.utils.log.get_task_logger(__name__)
+logger = get_task_logger(__name__)
 
 
 @celery.task
