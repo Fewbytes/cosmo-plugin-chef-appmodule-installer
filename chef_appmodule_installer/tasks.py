@@ -21,6 +21,7 @@ This file implements the AppModule.installer interface, where for each of tasks,
 and run the relevant runlist using the chef_client module.
 """
 
+from cosmo.events import send_event, get_cosmo_properties
 from celery.utils.log import get_task_logger
 from cosmo.celery import celery
 from chef_client_common.chef_client import set_up_chef_client, run_chef
@@ -42,8 +43,10 @@ def undeploy(chef_undeploy_runlist, chef_attributes, **kwargs):
 
 @celery.task
 @set_up_chef_client
-def start(chef_start_runlist, chef_attributes, **kwargs):
+def start(__cloudify_id, chef_start_runlist, chef_attributes, policy_service, **kwargs):
     run_chef(chef_start_runlist, chef_attributes)
+    host = get_cosmo_properties()['ip']
+    send_event(__cloudify_id, host, policy_service, "state", "running")
 
 
 @celery.task
